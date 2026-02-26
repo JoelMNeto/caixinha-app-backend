@@ -1,151 +1,250 @@
-💰 Household Finance API
+<h1>💰 Household Finance API</h1>
 
-API REST para controle financeiro compartilhado por grupos (households).
+<p>
+API REST para controle financeiro compartilhado por grupos (<strong>households</strong>).
+</p>
 
-Base URL:
+<h2>🌐 Base URL</h2>
 
-/api/v1
+<pre><code>/api/v1</code></pre>
 
-Autenticação obrigatória via JWT (exceto login/registro).
+<p><strong>Autenticação:</strong> JWT obrigatório (exceto login/registro).</p>
 
-📦 Controllers e Endpoints
-👤 UsersController
+<hr/>
+
+<h1>📦 Controllers e Endpoints</h1>
+
+<hr/>
+
+<h2>👤 UsersController</h2>
+
+<pre><code>
 POST   /users
 POST   /auth/login
 GET    /users/me
 PUT    /users/me
+</code></pre>
 
-Responsabilidade:
-Gerenciar usuários e autenticação.
+<h3>Responsabilidade</h3>
 
-Cuida apenas de identidade e perfil.
+<ul>
+  <li>Gerenciar usuários</li>
+  <li>Autenticação (login)</li>
+  <li>Atualização de perfil</li>
+</ul>
+
+<p>
+Este controller cuida apenas de <strong>identidade e perfil</strong>.
 Não lida com dados financeiros.
+</p>
 
-🏠 HouseholdsController
+<hr/>
+
+<h2>🏠 HouseholdsController</h2>
+
+<pre><code>
 POST   /households
 GET    /households
 GET    /households/{id}
 PUT    /households/{id}
 DELETE /households/{id}
+</code></pre>
 
-Responsabilidade:
-Gerenciar grupos financeiros.
+<h3>Responsabilidade</h3>
 
-Um household representa uma família ou grupo que compartilha transações.
+<ul>
+  <li>Gerenciar grupos financeiros</li>
+  <li>Criar, listar, atualizar e remover households</li>
+</ul>
 
-Tudo no sistema financeiro acontece dentro de um household.
+<p>
+Um <strong>household</strong> representa uma família ou grupo que compartilha transações.
+</p>
 
-👥 MembersController
+<p>
+<strong>Importante:</strong> tudo no sistema financeiro acontece dentro de um household.
+</p>
+
+<hr/>
+
+<h2>👥 MembersController</h2>
+
+<pre><code>
 POST   /households/{householdId}/members
 GET    /households/{householdId}/members
 DELETE /households/{householdId}/members/{userId}
+</code></pre>
 
-Responsabilidade:
-Gerenciar membros de um household.
+<h3>Responsabilidade</h3>
 
-Permite adicionar, listar e remover participantes, além de controlar papéis (OWNER ou MEMBER).
+<ul>
+  <li>Adicionar membros ao household</li>
+  <li>Listar participantes</li>
+  <li>Remover membros</li>
+  <li>Controlar papéis (OWNER ou MEMBER)</li>
+</ul>
 
-🗂️ CategoriesController
+<hr/>
+
+<h2>🗂️ CategoriesController</h2>
+
+<pre><code>
 POST   /households/{householdId}/categories
 GET    /households/{householdId}/categories
 PUT    /categories/{id}
 DELETE /categories/{id}
+</code></pre>
 
-Responsabilidade:
-Gerenciar categorias financeiras.
+<h3>Responsabilidade</h3>
 
-Categorias classificam transações como:
+<ul>
+  <li>Gerenciar categorias financeiras</li>
+</ul>
 
-INCOME (receita)
+<p>Categorias classificam transações como:</p>
 
-EXPENSE (despesa)
+<ul>
+  <li><strong>INCOME</strong> (receita)</li>
+  <li><strong>EXPENSE</strong> (despesa)</li>
+</ul>
 
+<p>
 Cada household possui suas próprias categorias.
+</p>
 
-💳 TransactionsController
+<hr/>
+
+<h2>💳 TransactionsController</h2>
+
+<pre><code>
 POST   /households/{householdId}/transactions
 GET    /households/{householdId}/transactions
 PUT    /transactions/{id}
 DELETE /transactions/{id}
+</code></pre>
 
-Responsabilidade:
-Registrar movimentações financeiras reais.
+<h3>Responsabilidade</h3>
 
-É o núcleo do sistema:
+<ul>
+  <li>Registrar movimentações financeiras reais</li>
+  <li>Criar receitas e despesas</li>
+  <li>Consultar com filtros</li>
+  <li>Atualizar e excluir transações</li>
+</ul>
 
-Criação de receitas e despesas
+<p>
+Este é o <strong>núcleo do sistema</strong>.
+</p>
 
-Consulta com filtros
+<p>
+Toda transação pertence a um único household.
+</p>
 
-Atualização e exclusão
+<hr/>
 
-Toda transação pertence a um household.
+<h2>🔁 RecurringController</h2>
 
-🔁 RecurringController
+<pre><code>
 POST   /households/{householdId}/recurring
 GET    /households/{householdId}/recurring
 PUT    /recurring/{id}
 DELETE /recurring/{id}
+</code></pre>
 
-Responsabilidade:
-Gerenciar transações recorrentes.
+<h3>Responsabilidade</h3>
 
-Define regras automáticas como:
+<ul>
+  <li>Gerenciar transações recorrentes</li>
+</ul>
 
-Salário mensal
+<p>Define regras automáticas como:</p>
 
-Aluguel
+<ul>
+  <li>Salário mensal</li>
+  <li>Aluguel</li>
+  <li>Assinaturas</li>
+</ul>
 
-Assinaturas
+<p>
+<strong>RecurringTransaction</strong> define a regra.<br/>
+<strong>Transaction</strong> é a execução real gerada.
+</p>
 
-RecurringTransaction define a regra.
-Transaction é a execução real gerada.
+<hr/>
 
-💰 BudgetsController
+<h2>💰 BudgetsController</h2>
+
+<pre><code>
 POST   /households/{householdId}/budgets
 GET    /households/{householdId}/budgets
+</code></pre>
 
-Responsabilidade:
-Gerenciar orçamentos por categoria e período.
+<h3>Responsabilidade</h3>
 
-Permite controlar planejamento financeiro.
+<ul>
+  <li>Gerenciar orçamentos por categoria e período</li>
+  <li>Controlar planejamento financeiro</li>
+</ul>
 
-📊 DashboardController
+<hr/>
+
+<h2>📊 DashboardController</h2>
+
+<pre><code>
 GET /households/{householdId}/dashboard
+</code></pre>
 
-Responsabilidade:
-Fornecer resumo financeiro consolidado do household.
+<h3>Responsabilidade</h3>
 
-Normalmente retorna:
+<ul>
+  <li>Fornecer resumo financeiro consolidado</li>
+</ul>
 
-Total de receitas
+<p>Normalmente retorna:</p>
 
-Total de despesas
+<ul>
+  <li>Total de receitas</li>
+  <li>Total de despesas</li>
+  <li>Saldo</li>
+  <li>Resumo por categoria</li>
+</ul>
 
-Saldo
-
-Resumo por categoria
-
+<p>
 Usado na tela principal da aplicação.
+</p>
 
-🔔 NotificationsController
+<hr/>
+
+<h2>🔔 NotificationsController</h2>
+
+<pre><code>
 GET /notifications
 PUT /notifications/{id}/read
+</code></pre>
 
-Responsabilidade:
-Gerenciar notificações do usuário.
+<h3>Responsabilidade</h3>
 
-Pode ser usado para:
+<ul>
+  <li>Gerenciar notificações do usuário</li>
+</ul>
 
-Alertas de orçamento
+<p>Pode ser usado para:</p>
 
-Avisos importantes
+<ul>
+  <li>Alertas de orçamento</li>
+  <li>Avisos importantes</li>
+  <li>Eventos do sistema</li>
+</ul>
 
-Eventos do sistema
-
+<p>
 Funciona no nível do usuário.
+</p>
 
-🧠 Modelo Mental do Sistema
+<hr/>
+
+<h1>🧠 Modelo Mental do Sistema</h1>
+
+<pre><code>
 Usuário
   └── Households
         ├── Members
@@ -154,33 +253,41 @@ Usuário
         ├── Recurring
         ├── Budgets
         └── Dashboard
+</code></pre>
 
-Tudo financeiro acontece dentro de um household.
+<p>
+<strong>Tudo financeiro acontece dentro de um household.</strong>
+</p>
 
-🔐 Regras Fundamentais
+<hr/>
 
-Todo endpoint financeiro exige validação de membership
+<h1>🔐 Regras Fundamentais</h1>
 
-Categorias pertencem a um único household
+<ul>
+  <li>Todo endpoint financeiro exige validação de membership</li>
+  <li>Categorias pertencem a um único household</li>
+  <li>Transações pertencem a um único household</li>
+  <li>Recorrências geram transações</li>
+  <li>Histórico financeiro não deve ser alterado retroativamente</li>
+</ul>
 
-Transações pertencem a um único household
+<hr/>
 
-Recorrências geram transações
+<h1>🚀 Fluxo Básico de Uso</h1>
 
-Histórico financeiro não deve ser alterado retroativamente
+<ol>
+  <li>Criar usuário / Login</li>
+  <li>Criar ou entrar em um household</li>
+  <li>Criar categorias (se necessário)</li>
+  <li>Registrar transações</li>
+  <li>Criar recorrências (opcional)</li>
+  <li>Definir orçamentos</li>
+  <li>Consultar dashboard</li>
+</ol>
 
-🚀 Fluxo Básico de Uso
+<hr/>
 
-Criar usuário / Login
-
-Criar ou entrar em um household
-
-Criar categorias (se necessário)
-
-Registrar transações
-
-Criar recorrências (opcional)
-
-Definir orçamentos
-
-Consultar dashboard
+<p align="center">
+  <strong>Household Finance API</strong><br/>
+  Controle financeiro compartilhado de forma simples e estruturada.
+</p>
