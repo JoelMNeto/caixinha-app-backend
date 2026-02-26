@@ -1,11 +1,8 @@
 package com.household.finance.user.service;
 
 import com.household.finance.common.service.EmailService;
+import com.household.finance.user.dto.*;
 import com.household.finance.user.repository.UserRepository;
-import com.household.finance.user.dto.UserRegistrationData;
-import com.household.finance.user.dto.UserUpdateData;
-import com.household.finance.user.dto.UserUpdateEmail;
-import com.household.finance.user.dto.UserUpdatePassword;
 import com.household.finance.user.entity.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -38,7 +35,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User register(@Valid UserRegistrationData userRegistrationData) {
+    public UserResponseData register(@Valid UserRegistrationData userRegistrationData) {
         this.validatePasswordConfirmation(userRegistrationData.password(), userRegistrationData.confirmationPassword());
 
         var encryptedPassword = this.passwordEncoder.encode(userRegistrationData.password());
@@ -47,7 +44,7 @@ public class UserService implements UserDetailsService {
 
         this.emailService.sendVerificationEmail(user);
 
-        return userRepository.save(user);
+        return new UserResponseData(userRepository.save(user));
     }
 
     public User findById(Long id) {
@@ -62,23 +59,23 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User updateUser(@Valid UserUpdateData userUpdateData, User loggedUser) {
+    public UserResponseData updateUser(@Valid UserUpdateData userUpdateData, User loggedUser) {
         loggedUser.updateData(userUpdateData);
 
-        return loggedUser;
+        return new UserResponseData(loggedUser);
     }
 
     @Transactional
-    public User changeEmail(UserUpdateEmail userUpdateEmail, User loggedUser) {
+    public UserResponseData changeEmail(UserUpdateEmail userUpdateEmail, User loggedUser) {
         loggedUser.updateEmail(userUpdateEmail.newEmail());
 
         this.emailService.sendVerificationEmail(loggedUser);
 
-        return loggedUser;
+        return new UserResponseData(loggedUser);
     }
 
     @Transactional
-    public User changePassword(@Valid UserUpdatePassword userUpdatePassword, User loggedUser) {
+    public UserResponseData changePassword(@Valid UserUpdatePassword userUpdatePassword, User loggedUser) {
         this.validateUpdatePassword(loggedUser, userUpdatePassword.currentPassword(),
                 userUpdatePassword.newPassword(), userUpdatePassword.confirmationNewPassword());
 
@@ -86,7 +83,7 @@ public class UserService implements UserDetailsService {
 
         loggedUser.setPasswordHash(encryptedNewPassword);
 
-        return loggedUser;
+        return new UserResponseData(loggedUser);
     }
 
     public void deleteUser(User loggedUser) {
@@ -95,13 +92,13 @@ public class UserService implements UserDetailsService {
 
     private void validatePasswordConfirmation(String password, String confirmationPassword) {
         if (!password.equals(confirmationPassword)) {
-            throw new RuntimeException("As senhas não correspondem.");
+            throw new RuntimeException("The passwords don't match.");
         }
     }
 
     public void validateUpdatePassword(User loggedUser, String currentPassword, String newPassword, String confirmationNewPassword) {
         if (!this.passwordEncoder.matches(currentPassword, loggedUser.getPassword())) {
-            throw new RuntimeException("Senha atual incorreta.");
+            throw new RuntimeException("Incorrect current password.");
         }
 
         this.validatePasswordConfirmation(newPassword, confirmationNewPassword);

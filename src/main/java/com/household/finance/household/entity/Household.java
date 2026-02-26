@@ -1,7 +1,9 @@
 package com.household.finance.household.entity;
 
+import com.household.finance.household.dto.HouseholdRegistrationData;
 import com.household.finance.user.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +34,19 @@ public class Household {
 
     @Column(name="updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public Household(@Valid HouseholdRegistrationData householdRegistrationData, User loggedUser) {
+        this.name = householdRegistrationData.name();
+        this.createdBy = loggedUser;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public void updateHousehold(HouseholdRegistrationData householdRegistrationData) {
+        if (householdRegistrationData.name() != null) {
+            this.name = householdRegistrationData.name();
+        }
+
+        this.setUpdatedAt(LocalDateTime.now());
+    }
 }

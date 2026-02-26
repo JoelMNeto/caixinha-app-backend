@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity security) {
         return security
                 .authorizeHttpRequests(req -> {
-                    req.requestMatchers("/login", "/refresh", "/register", "/verify-account").permitAll();
+                    req.requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/users/register", "/api/v1/users/verify-account").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

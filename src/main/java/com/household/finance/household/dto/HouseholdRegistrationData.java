@@ -1,4 +1,6 @@
 package com.household.finance.household.dto;
 
-public record HouseholdRegistrationData(String name) {
+import jakarta.validation.constraints.NotBlank;
+
+public record HouseholdRegistrationData(@NotBlank String name) {
 }

@@ -14,7 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@RestController("/user")
+@RestController("/api/v1/users")
 public class UserController {
 
     @Autowired
@@ -24,9 +24,9 @@ public class UserController {
     public ResponseEntity<UserResponseData> register(@RequestBody @Valid UserRegistrationData userRegistrationData, UriComponentsBuilder uriBuilder) {
         var user = this.userService.register(userRegistrationData);
 
-        var uri = uriBuilder.path("/{userName}").buildAndExpand(user.getUsername()).toUri();
+        var uri = uriBuilder.path("/{username}").buildAndExpand(user.username()).toUri();
 
-        return ResponseEntity.created(uri).body(new UserResponseData(user));
+        return ResponseEntity.created(uri).body(user);
     }
 
     @GetMapping("/verify-account")
@@ -36,35 +36,35 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/{username}")
     public ResponseEntity<UserResponseData> getUserByUsername(@RequestParam String username) {
         var user = this.userService.getUserDataByUsername(username);
 
         return ResponseEntity.ok(new UserResponseData(user));
     }
 
-    @PutMapping
+    @PutMapping("/me")
     public ResponseEntity<UserResponseData> updateUser(@RequestBody @Valid UserUpdateData userUpdateData, @AuthenticationPrincipal User loggedUser) {
         var user = this.userService.updateUser(userUpdateData, loggedUser);
 
-        return ResponseEntity.ok(new UserResponseData(user));
+        return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/change-email")
+    @PutMapping("/me/change-email")
     public ResponseEntity<UserResponseData> changeEmail(@RequestBody @Valid UserUpdateEmail userUpdateEmail, @AuthenticationPrincipal User loggedUser) {
         var user = this.userService.changeEmail(userUpdateEmail, loggedUser);
 
-        return ResponseEntity.ok(new UserResponseData(user));
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/change-password")
+    @PostMapping("/me/change-password")
     public ResponseEntity<UserResponseData> changePassword(@RequestBody @Valid UserUpdatePassword userUpdatePassword, @AuthenticationPrincipal User loggedUser) {
         var user = this.userService.changePassword(userUpdatePassword, loggedUser);
 
-        return ResponseEntity.ok(new UserResponseData(user));
+        return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/me")
     public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User loggedUser) {
         this.userService.deleteUser(loggedUser);
 

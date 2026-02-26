@@ -1,7 +1,15 @@
 package com.household.finance.membership.repository;
 
-import com.household.finance.household.entity.Household;
+import com.household.finance.household.enumeration.Role;
+import com.household.finance.membership.entity.HouseholdMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HouseholdMemberRepository extends JpaRepository<Household, Long> {
+import java.util.List;
+
+public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember, Long> {
+    boolean existsByHouseholdIdAndUserId(Long householdId, Long userId);
+
+    boolean existsByHouseholdIdAndUserIdAndRole(Long householdId, Long userId, Role role);
+
+    List<HouseholdMember> findByHouseholdIdAndUserId(Long householdId, Long userId);
 }
