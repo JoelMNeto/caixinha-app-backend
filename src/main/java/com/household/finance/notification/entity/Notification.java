@@ -22,7 +22,7 @@ public class Notification {
     private Long id;
 
     @ManyToOne
-    @Column(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private String type;

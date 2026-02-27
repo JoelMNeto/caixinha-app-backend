@@ -21,7 +21,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
        )
        FROM Transaction t
        WHERE t.household.id = :householdId
-       AND t.date BETWEEN :start AND :end
+       AND t.transactionDate BETWEEN :start AND :end
        """)
     SummaryResponseDto getSummary(
             Long householdId,
@@ -38,7 +38,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
        FROM Transaction t
        JOIN t.category c
        WHERE t.household.id = :householdId
-       AND t.date BETWEEN :start AND :end
+       AND t.transactionDate BETWEEN :start AND :end
        GROUP BY c.id, c.name, c.type
        """)
     List<CategorySummaryProjection> getByCategory(

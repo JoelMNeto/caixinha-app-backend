@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void verifyEmail(String token) {
-        var user = this.userRepository.findByToken(token).orElseThrow();
+        var user = this.userRepository.findByConfirmationCode(token).orElseThrow();
 
         user.verify();
     }
