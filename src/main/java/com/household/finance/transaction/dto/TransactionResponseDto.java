@@ -5,6 +5,8 @@ import com.household.finance.household.dto.HouseholdDto;
 import com.household.finance.transaction.entity.Transaction;
 import com.household.finance.user.dto.UserResponseData;
 
+import java.time.LocalDateTime;
+
 public record TransactionResponseDto(Long id,
                                      HouseholdDto householdId,
                                      UserResponseData userId,
@@ -14,7 +16,9 @@ public record TransactionResponseDto(Long id,
                                      String description,
                                      String transactionDate,
                                      String paymentMethod,
-                                     Boolean isRecurring
+                                     Boolean isRecurring,
+                                     LocalDateTime createdAt,
+                                     LocalDateTime updatedAt
                                      ) {
 
     public TransactionResponseDto(Transaction transaction) {
@@ -27,6 +31,8 @@ public record TransactionResponseDto(Long id,
              transaction.getDescription(),
              transaction.getTransactionDate().toString(),
              transaction.getPaymentMethod(),
-             transaction.getIsRecurring());
+             transaction.getIsRecurring(),
+             transaction.getCreatedAt(),
+             transaction.getUpdatedAt());
     }
 }

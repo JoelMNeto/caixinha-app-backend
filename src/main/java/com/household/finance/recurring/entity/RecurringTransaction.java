@@ -3,6 +3,8 @@ package com.household.finance.recurring.entity;
 import com.household.finance.category.entity.Category;
 import com.household.finance.category.enumerations.TypeEnum;
 import com.household.finance.household.entity.Household;
+import com.household.finance.recurring.dto.CreateRecurringDto;
+import com.household.finance.recurring.enumerations.FrequencyEnum;
 import com.household.finance.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -47,7 +49,7 @@ public class RecurringTransaction {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private String frequency;
+    private FrequencyEnum frequency;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
@@ -66,4 +68,20 @@ public class RecurringTransaction {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public RecurringTransaction(User user, Household household, Category category, CreateRecurringDto dto) {
+        this.setUser(user);
+        this.setHousehold(household);
+        this.setCategory(category);
+        this.setType(TypeEnum.fromString(dto.type()));
+        this.setFrequency(FrequencyEnum.fromString(dto.frequency()));
+        this.setAmount(new BigDecimal(dto.amount()));
+        this.setDescription(dto.description());
+        this.setStartDate(dto.startDate());
+        this.setEndDate(dto.endDate());
+        this.setPaymentMethod(dto.paymentMethod());
+        this.setActive(true);
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
+    }
 }

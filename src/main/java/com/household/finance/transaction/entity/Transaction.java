@@ -78,7 +78,7 @@ public class Transaction {
         this.setType(TypeEnum.fromString(dto.type()));
         this.setAmount(new BigDecimal(dto.amount()));
         this.setDescription(dto.description());
-        this.setTransactionDate(LocalDateTime.parse(dto.transactionDate()));
+        this.setTransactionDate(dto.transactionDate());
         this.setPaymentMethod(dto.paymentMethod());
         this.setIsRecurring(false);
         this.setRecurringTransaction(null);

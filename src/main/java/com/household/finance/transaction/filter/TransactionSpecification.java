@@ -2,11 +2,13 @@ package com.household.finance.transaction.filter;
 
 import com.household.finance.transaction.entity.Transaction;
 import jakarta.persistence.criteria.Predicate;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class TransactionSpecification {
 
     public static Specification<Transaction> withFilters(TransactionFilter filter) {

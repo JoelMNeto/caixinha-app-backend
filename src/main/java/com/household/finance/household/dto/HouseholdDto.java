@@ -7,9 +7,10 @@ import java.time.LocalDateTime;
 public record HouseholdDto(Long id,
                            String name,
                            Long createdBy,
-                           LocalDateTime createdAt) {
+                           LocalDateTime createdAt,
+                           LocalDateTime updatedAt) {
 
     public HouseholdDto(Household household) {
-        this(household.getId(), household.getName(), household.getCreatedBy().getId(), household.getCreatedAt());
+        this(household.getId(), household.getName(), household.getCreatedBy().getId(), household.getCreatedAt(), household.getUpdatedAt());
     }
 }
