@@ -87,7 +87,7 @@ public class User implements UserDetails {
 
     public void verify() throws RuntimeException {
         if (this.getConfirmationCodeExpires().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Expired Token!");
+            throw new RuntimeException("Expired confirmation code!");
         }
 
         this.setVerified(true);

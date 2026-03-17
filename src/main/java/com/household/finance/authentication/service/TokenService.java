@@ -30,6 +30,7 @@ public class TokenService {
                     .withExpiresAt(getExpiration(30))
                     .sign(algorithm);
         } catch (Exception exception){
+            exception.printStackTrace();
             throw new RuntimeException("Error generating JWT access token.");
         }
     }
@@ -58,11 +59,12 @@ public class TokenService {
                     .withIssuer(TOKEN_ISSUER)
                     .build();
 
-            decodedJWT = verifier.verify(token);
+            decodedJWT = verifier.verify(token.trim());
 
             return decodedJWT.getSubject();
         } catch (Exception exception){
-            throw new RuntimeException("Error generating JWT access token.");
+            exception.printStackTrace();
+            throw new RuntimeException("Error verifying JWT access token.");
         }
     }
 

@@ -30,7 +30,7 @@ public class Notification {
     private String title;
 
     @Column(columnDefinition = "text")
-    private String text;
+    private String message;
 
     @Column(name = "is_read")
     private boolean isRead = false;
@@ -38,11 +38,11 @@ public class Notification {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Notification(User user, String title, String text) {
+    public Notification(User user, String title, String message) {
         this.setUser(user);
         this.setType("INFO");
         this.setTitle(title);
-        this.setText(text);
+        this.setMessage(message);
         this.setRead(false);
         this.setCreatedAt(LocalDateTime.now());
     }

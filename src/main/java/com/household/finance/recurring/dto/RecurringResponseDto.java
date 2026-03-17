@@ -19,7 +19,8 @@ public record RecurringResponseDto(Long id,
                                    String endDate,
                                    String paymentMethod,
                                    LocalDateTime createdAt,
-                                   LocalDateTime updatedAt) {
+                                   LocalDateTime updatedAt,
+                                   boolean isActive) {
 
     public RecurringResponseDto(RecurringTransaction recurringTransaction) {
         this(
@@ -35,7 +36,8 @@ public record RecurringResponseDto(Long id,
                 recurringTransaction.getEndDate() != null ? recurringTransaction.getEndDate().toString() : null,
                 recurringTransaction.getPaymentMethod(),
                 recurringTransaction.getCreatedAt(),
-                recurringTransaction.getUpdatedAt()
+                recurringTransaction.getUpdatedAt(),
+                recurringTransaction.isActive()
         );
     }
 }

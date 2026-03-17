@@ -8,7 +8,7 @@ public record NotificationResponseDto(Long id, UserResponseData user, String tit
     public NotificationResponseDto(Notification notification) {
         this(notification.getId(),
                 new UserResponseData(notification.getUser()),
-                notification.getTitle(), notification.getText(),
+                notification.getTitle(), notification.getMessage(),
                 notification.isRead());
     }
 }

@@ -11,5 +11,7 @@ public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember
 
     boolean existsByHouseholdIdAndUserIdAndRole(Long householdId, Long userId, Role role);
 
-    List<HouseholdMember> findByHouseholdIdAndUserId(Long householdId, Long userId);
+    List<HouseholdMember> findAllByHouseholdId(Long householdId);
+
+    void deleteAllByHouseholdId(Long householdId);
 }

@@ -6,6 +6,7 @@ import com.household.finance.category.dto.UpdateCategoryDto;
 import com.household.finance.category.entity.Category;
 import com.household.finance.category.repository.CategoryRepository;
 import com.household.finance.common.service.MembershipService;
+import com.household.finance.household.service.HouseholdService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,18 @@ public class CategoryService {
     @Autowired
     private MembershipService membershipService;
 
+    @Autowired
+    private HouseholdService householdService;
+
     @Transactional
     public CategoryResponseDto createCategory(Long userId, Long householdId, CreateCategoryDto dto) {
         this.membershipService.validateMembership(userId, householdId);
 
-        var category = new Category(dto);
+        var household = householdService.findHouseholdById(householdId);
+
+        var category = new Category(dto, household);
+
+        this.repository.save(category);
 
         return new CategoryResponseDto(category);
     }
@@ -46,7 +54,7 @@ public class CategoryService {
 
         this.membershipService.validateMembership(userId, category.getHousehold().getId());
 
-        category.updateHousehold(dto);
+        category.updateCategory(dto);
 
         repository.save(category);
 

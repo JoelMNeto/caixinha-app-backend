@@ -43,14 +43,16 @@ public class Category {
     @Column(name="created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Category(CreateCategoryDto dto) {
+    public Category(CreateCategoryDto dto, Household household) {
+        this.setHousehold(household);
         this.setName(dto.name());
         this.setType(TypeEnum.fromString(dto.type()));
         this.setIcon(dto.icon());
         this.setColor(dto.color());
+        this.setCreatedAt(LocalDateTime.now());
     }
 
-    public void updateHousehold(UpdateCategoryDto dto) {
+    public void updateCategory(UpdateCategoryDto dto) {
         if (dto.name() != null) {
             this.setName(dto.name());
         }

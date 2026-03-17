@@ -52,6 +52,7 @@ public class TransactionService {
         return new TransactionResponseDto(transaction);
     }
 
+    @Transactional
     public List<TransactionResponseDto> listTransactions(Long loggedUserId, Long householdId, LocalDateTime startDate, LocalDateTime endDate, String type, Long categoryId, Long userId) {
         this.membershipService.validateMembership(loggedUserId, householdId);
 
@@ -79,6 +80,8 @@ public class TransactionService {
         }
 
         transaction.updateTransaction(dto, category);
+
+        this.transactionRepository.save(transaction);
 
         return new TransactionResponseDto(transaction);
     }

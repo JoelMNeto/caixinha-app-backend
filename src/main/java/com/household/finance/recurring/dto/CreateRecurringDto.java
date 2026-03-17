@@ -2,8 +2,7 @@ package com.household.finance.recurring.dto;
 
 import java.time.LocalDateTime;
 
-public record CreateRecurringDto(Long householdId,
-                                 Long categoryId,
+public record CreateRecurringDto(Long categoryId,
                                  String type,
                                  String amount,
                                  String description,

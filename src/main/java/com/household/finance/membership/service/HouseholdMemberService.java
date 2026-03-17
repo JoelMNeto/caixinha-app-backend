@@ -7,6 +7,7 @@ import com.household.finance.membership.dto.HouseholdMemberDto;
 import com.household.finance.membership.entity.HouseholdMember;
 import com.household.finance.membership.repository.HouseholdMemberRepository;
 import com.household.finance.user.repository.UserRepository;
+import com.household.finance.household.enumeration.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class HouseholdMemberService {
     public List<HouseholdMemberDto> listMembers(Long userId, Long householdId) {
         this.membershipService.validateMembership(userId, householdId);
 
-        return memberRepository.findByHouseholdIdAndUserId(householdId, userId).stream()
+        return memberRepository.findAllByHouseholdId(householdId).stream()
                 .map(HouseholdMemberDto::new)
                 .toList();
     }
@@ -44,7 +45,7 @@ public class HouseholdMemberService {
 
         var user = userRepository.findById(dto.userId()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        var householdMember = new HouseholdMember(household, user);
+        var householdMember = new HouseholdMember(household, user, Role.MEMBER);
 
         return new HouseholdMemberDto(memberRepository.save(householdMember));
     }

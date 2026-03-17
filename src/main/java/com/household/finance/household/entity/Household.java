@@ -2,6 +2,7 @@ package com.household.finance.household.entity;
 
 import com.household.finance.household.dto.HouseholdRegistrationData;
 import com.household.finance.user.entity.User;
+import com.household.finance.membership.entity.HouseholdMember;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +30,9 @@ public class Household {
     @ManyToOne
     @JoinColumn(name = "created_by")
     private User createdBy;
+
+    @OneToMany(mappedBy = "household", fetch = FetchType.LAZY)
+    private List<HouseholdMember> members;
 
     @Column(name="created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

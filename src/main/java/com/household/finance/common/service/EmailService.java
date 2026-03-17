@@ -43,18 +43,31 @@ public class EmailService {
     }
 
     public void sendVerificationEmail(User user) {
-        String subject = "Confirmar email";
+        String subject = "Confirme seu cadastro";
 
-        String text = generateEmailContent("Olá [[name]], Bem vindo(a) ao Caixinha App!<br>"
-                + "Use esse código para ativar sua conta: <br>"
-                + "[[codigo]] <br>"
-                + "Obrigado,<br>"
-                + "Caixinha App :).", user.getName(), String.valueOf(user.getConfirmationCode()));
+        String text = generateEmailContent("""
+                Olá, [[name]]
+                <br><br>
+                Recebemos uma solicitação para criar sua conta.
+                <br><br>
+                Para concluir o cadastro e confirmar seu endereço de e-mail, utilize o código de verificação abaixo:
+                <br><br>
+                 Código de confirmação: [[code]]
+                <br><br>
+                Digite este código na tela de confirmação para ativar sua conta.
+                <br>
+                Por motivos de segurança, o código é válido por tempo limitado.
+                <br><br>
+                Se você não solicitou este cadastro, pode desconsiderar este e-mail.
+                <br><br>
+                Atenciosamente,
+                <br>
+                Caixinha App""", user.getName(), String.valueOf(user.getConfirmationCode()));
 
         this.sendEmail(user.getEmail(), subject, text);
     }
 
-    private String generateEmailContent(String template, String name, String url) {
-        return template.replace("[[name]]", name).replace("[[URL]]", url);
+    private String generateEmailContent(String template, String name, String code) {
+        return template.replace("[[name]]", name).replace("[[code]]", code);
     }
 }

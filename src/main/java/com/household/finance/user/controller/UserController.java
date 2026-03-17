@@ -1,11 +1,7 @@
 package com.household.finance.user.controller;
 
-import com.household.finance.user.dto.UserResponseData;
+import com.household.finance.user.dto.*;
 import com.household.finance.user.service.UserService;
-import com.household.finance.user.dto.UserRegistrationData;
-import com.household.finance.user.dto.UserUpdateData;
-import com.household.finance.user.dto.UserUpdateEmail;
-import com.household.finance.user.dto.UserUpdatePassword;
 import com.household.finance.user.entity.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@RestController("/api/v1/users")
+@RestController
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired
@@ -29,15 +26,15 @@ public class UserController {
         return ResponseEntity.created(uri).body(user);
     }
 
-    @GetMapping("/verify-account")
-    public ResponseEntity<Void> verifyEmail(@RequestParam String token) {
-        this.userService.verifyEmail(token);
+    @PutMapping("/verify-account")
+    public ResponseEntity<Void> verifyEmail(@RequestBody @Valid ConfirmationCodeData data) {
+        this.userService.verifyEmail(data.confirmationCode());
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserResponseData> getUserByUsername(@RequestParam String username) {
+    public ResponseEntity<UserResponseData> getUserByUsername(@PathVariable String username) {
         var user = this.userService.getUserDataByUsername(username);
 
         return ResponseEntity.ok(new UserResponseData(user));
@@ -57,7 +54,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/me/change-password")
+    @PutMapping("/me/change-password")
     public ResponseEntity<UserResponseData> changePassword(@RequestBody @Valid UserUpdatePassword userUpdatePassword, @AuthenticationPrincipal User loggedUser) {
         var user = this.userService.changePassword(userUpdatePassword, loggedUser);
 

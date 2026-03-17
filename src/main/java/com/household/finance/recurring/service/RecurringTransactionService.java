@@ -50,6 +50,7 @@ public class RecurringTransactionService {
         return new RecurringResponseDto(recurringTransaction);
     }
 
+    @Transactional
     public List<RecurringResponseDto> list(User user, Long householdId) {
         this.membershipService.validateMembership(user.getId(), householdId);
 

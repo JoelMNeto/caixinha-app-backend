@@ -13,7 +13,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-@RestController("/api/v1/households")
+@RestController()
+@RequestMapping("/api/v1/households")
 public class HouseholdController {
 
     @Autowired

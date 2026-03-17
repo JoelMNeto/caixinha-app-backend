@@ -20,7 +20,7 @@ public class DashboardService {
     private TransactionRepository transactionRepository;
     
     public SummaryResponseDto summary(Long userId, Long householdId, LocalDateTime startDate, LocalDateTime endDate) {
-        this.membershipService.validateMembership(householdId, userId);
+        this.membershipService.validateMembership(userId, householdId);
 
         return transactionRepository.getSummary(
                 householdId,
@@ -30,7 +30,7 @@ public class DashboardService {
     }
 
     public List<CategorySummaryResponseDto> byCategory(Long userId, Long householdId, LocalDateTime startDate, LocalDateTime endDate) {
-        this.membershipService.validateMembership(householdId, userId);
+        this.membershipService.validateMembership(userId, householdId);
 
         return transactionRepository.getByCategory(
                         householdId,

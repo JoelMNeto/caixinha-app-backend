@@ -32,15 +32,17 @@ public class HouseholdMember {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     @Column(name="joined_at")
     private LocalDateTime joinedAt = LocalDateTime.now();
 
-    public HouseholdMember(Household household, User user) {
+    public HouseholdMember(Household household, User user, Role role) {
         this.setHousehold(household);
         this.setUser(user);
-        this.setRole(Role.MEMBER);
+        this.setRole(role);
         this.setJoinedAt(LocalDateTime.now());
     }
 }

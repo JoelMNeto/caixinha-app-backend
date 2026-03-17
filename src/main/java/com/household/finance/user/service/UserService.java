@@ -62,6 +62,8 @@ public class UserService implements UserDetailsService {
     public UserResponseData updateUser(@Valid UserUpdateData userUpdateData, User loggedUser) {
         loggedUser.updateData(userUpdateData);
 
+        this.userRepository.save(loggedUser);
+
         return new UserResponseData(loggedUser);
     }
 
@@ -70,6 +72,8 @@ public class UserService implements UserDetailsService {
         loggedUser.updateEmail(userUpdateEmail.newEmail());
 
         this.emailService.sendVerificationEmail(loggedUser);
+
+        this.userRepository.save(loggedUser);
 
         return new UserResponseData(loggedUser);
     }
@@ -83,11 +87,14 @@ public class UserService implements UserDetailsService {
 
         loggedUser.setPasswordHash(encryptedNewPassword);
 
+        this.userRepository.save(loggedUser);
+
         return new UserResponseData(loggedUser);
     }
 
+    @Transactional
     public void deleteUser(User loggedUser) {
-        loggedUser.deactivate();
+        this.userRepository.delete(loggedUser);
     }
 
     private void validatePasswordConfirmation(String password, String confirmationPassword) {

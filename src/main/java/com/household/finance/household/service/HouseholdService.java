@@ -30,27 +30,33 @@ public class HouseholdService {
 
     @Transactional
     public HouseholdDto createHousehold(@Valid HouseholdRegistrationData householdRegistrationData, User loggedUser) {
+        this.vallidateHouseholdRegistrationData(householdRegistrationData, loggedUser);
+
         var household = new Household(householdRegistrationData, loggedUser);
 
         this.householdRepository.save(household);
 
-        var householdMember = new HouseholdMember(household, loggedUser);
+        var householdMember = new HouseholdMember(household, loggedUser, Role.OWNER);
 
         this.householdMemberRepository.save(householdMember);
 
         return new HouseholdDto(household);
     }
 
+    @Transactional
     public List<HouseholdDto> listHouseholdsByUser(Long userId) {
-        var households  = householdRepository.findAllByUserId(userId);
+        var households  = householdRepository.findAllByUserIdWithMembers(userId);
 
         return households.stream().map(HouseholdDto::new).toList();
     }
 
+    @Transactional
     public HouseholdDto getHousehold(Long userId, Long householdId) {
-        var household = findHouseholdById(householdId);
-
         this.membershipService.validateMembership(userId, householdId);
+
+        var household = this.householdRepository
+                .findByIdWithMembers(householdId)
+                .orElseThrow(() -> new RuntimeException("No household found."));
 
         return new HouseholdDto(household);
     }
@@ -72,10 +78,18 @@ public class HouseholdService {
 
         this.membershipService.validateOwnership(userId, householdId);
 
-        householdRepository.delete(household);
+        this.householdMemberRepository.deleteAllByHouseholdId(householdId);
+
+        this.householdRepository.delete(household);
     }
 
-    private Household findHouseholdById(Long householdId) {
+    public Household findHouseholdById(Long householdId) {
         return householdRepository.findById(householdId).orElseThrow(() -> new RuntimeException("Household not found"));
+    }
+
+    private void vallidateHouseholdRegistrationData(HouseholdRegistrationData householdRegistrationData, User loggedUser) {
+        if (householdRepository.existsByNameIgnoreCaseAndMembersUserId(householdRegistrationData.name(), loggedUser.getId())) {
+            throw new RuntimeException("You already have a household with this name.");
+        }
     }
 }

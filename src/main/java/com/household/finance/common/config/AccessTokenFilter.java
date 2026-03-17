@@ -34,7 +34,8 @@ public class AccessTokenFilter extends OncePerRequestFilter {
 
         if (token != null) {
             String email = this.tokenService.verifyToken(token);
-            User user = userRepository.findByEmailIgnoreCaseAndVerifiedTrueAndActiveTrue(email).orElseThrow();
+            User user = userRepository.findByEmailIgnoreCaseAndVerifiedTrueAndActiveTrue(email)
+                    .orElseThrow(() -> new RuntimeException("User not found."));
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 

@@ -2,8 +2,7 @@ package com.household.finance.transaction.dto;
 
 import java.time.LocalDateTime;
 
-public record CreateTransactionDto(Long householdId,
-                                   Long categoryId,
+public record CreateTransactionDto(Long categoryId,
                                    String type,
                                    String amount,
                                    String description,
