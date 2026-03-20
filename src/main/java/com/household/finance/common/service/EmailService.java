@@ -18,8 +18,6 @@ public class EmailService {
     private static final String EMAIL_ORIGIN = "caixinha.app@email.com";
     private static final String SENDER_NAME = "Caixinha App";
 
-    public static final String URL_SITE = "http://localhost:8080";
-
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
@@ -59,6 +57,31 @@ public class EmailService {
                 Por motivos de segurança, o código é válido por tempo limitado.
                 <br><br>
                 Se você não solicitou este cadastro, pode desconsiderar este e-mail.
+                <br><br>
+                Atenciosamente,
+                <br>
+                Caixinha App""", user.getName(), String.valueOf(user.getConfirmationCode()));
+
+        this.sendEmail(user.getEmail(), subject, text);
+    }
+
+    public void sendResetPasswordEmail(User user) {
+        String subject = "Redefinição de senha";
+
+        String text = generateEmailContent("""
+                Olá, [[name]]
+                <br><br>
+                Recebemos uma solicitação para redefinir sua senha.
+                <br><br>
+                Para concluir o processo de redefinição, utilize o código de verificação abaixo:
+                <br><br>
+                 Código de confirmação: [[code]]
+                <br><br>
+                Digite este código na tela de redefinição para criar uma nova senha.
+                <br>
+                Por motivos de segurança, o código é válido por tempo limitado.
+                <br><br>
+                Se você não solicitou esta redefinição, pode desconsiderar este e-mail.
                 <br><br>
                 Atenciosamente,
                 <br>

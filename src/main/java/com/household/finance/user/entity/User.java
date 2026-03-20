@@ -66,8 +66,7 @@ public class User implements UserDetails {
         this.setVerified(false);
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
-        this.setConfirmationCode(100_000 + SECURE_RANDOM.nextInt(900_000));
-        this.setConfirmationCodeExpires(LocalDateTime.now().plusMinutes(30));
+        this.generateAndSetToken();
     }
 
     @Override
@@ -118,5 +117,10 @@ public class User implements UserDetails {
 
     public void deactivate() {
         this.setActive(false);
+    }
+
+    public void generateAndSetToken() {
+        this.setConfirmationCode(100_000 + User.SECURE_RANDOM.nextInt(900_000));
+        this.setConfirmationCodeExpires(LocalDateTime.now().plusMinutes(30));
     }
 }

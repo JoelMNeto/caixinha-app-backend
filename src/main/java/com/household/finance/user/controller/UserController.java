@@ -33,6 +33,20 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody @Valid UserForgotPasswordData data) {
+        this.userService.forgotPassword(data);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid UserResetPasswordData data) {
+        this.userService.resetPassword(data);
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseData> getUserByUsername(@PathVariable String username) {
         var user = this.userService.getUserDataByUsername(username);

@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void verifyEmail(String token) {
-        var user = this.userRepository.findByConfirmationCode(token).orElseThrow();
+        var user = this.findByConfirmationCode(token);
 
         user.verify();
     }
@@ -93,6 +93,32 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public void forgotPassword(UserForgotPasswordData data) {
+        var user = this.userRepository.findByEmailIgnoreCaseAndVerifiedTrueAndActiveTrue(data.email()).orElseThrow(
+                () -> new RuntimeException("User not found.")
+        );
+
+        user.generateAndSetToken();
+
+        this.emailService.sendResetPasswordEmail(user);
+    }
+
+    @Transactional
+    public void resetPassword(UserResetPasswordData data) {
+        var user = this.findByConfirmationCode(data.confirmationCode());
+
+        this.validatePasswordConfirmation(data.newPassword(), data.confirmationNewPassword());
+
+        var encryptedNewPassword = this.passwordEncoder.encode(data.newPassword());
+
+        user.setPasswordHash(encryptedNewPassword);
+        user.setConfirmationCode(null);
+        user.setConfirmationCodeExpires(null);
+
+        this.userRepository.save(user);
+    }
+
+    @Transactional
     public void deleteUser(User loggedUser) {
         this.userRepository.delete(loggedUser);
     }
@@ -109,5 +135,11 @@ public class UserService implements UserDetailsService {
         }
 
         this.validatePasswordConfirmation(newPassword, confirmationNewPassword);
+    }
+
+    public User findByConfirmationCode(String confirmationCode) {
+        return this.userRepository.findByConfirmationCode(confirmationCode).orElseThrow(
+                () -> new RuntimeException("Invalid confirmation code.")
+        );
     }
 }
