@@ -47,6 +47,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/verify-code")
+    public  ResponseEntity<ResetCodeResponseData> verifyCode(@RequestBody @Valid ConfirmationCodeData data) {
+        this.userService.verifyCode(data.confirmationCode());
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseData> getUserByUsername(@PathVariable String username) {
         var user = this.userService.getUserDataByUsername(username);

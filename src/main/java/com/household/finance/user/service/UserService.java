@@ -59,6 +59,15 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public void verifyCode(String token) {
+        var user = this.findByConfirmationCode(token);
+
+        user.generateAndSetToken();
+
+        return new ResetCodeResponseData(user.getConfirmationCode());
+    }
+
+    @Transactional
     public UserResponseData updateUser(@Valid UserUpdateData userUpdateData, User loggedUser) {
         loggedUser.updateData(userUpdateData);
 
