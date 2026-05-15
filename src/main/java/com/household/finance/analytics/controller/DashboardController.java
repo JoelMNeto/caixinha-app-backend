@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/households/{householdId}")
+@CrossOrigin(origins = "*")
 public class DashboardController {
 
     @Autowired

@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api/v1/households")
+@CrossOrigin(origins = "*")
 public class HouseholdController {
 
     @Autowired

@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired

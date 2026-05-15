@@ -43,7 +43,19 @@ public class TransactionService {
 
         var household = findHouseholdById(householdId);
 
-        var category = findCategoryById(dto.categoryId());
+        Category category = new Category();
+
+        category.setHousehold(household);
+
+        category.setName("Teste");
+
+        category.setDefault(true);
+
+        category.setType(TypeEnum.fromString(dto.type()));
+
+        category.setCreatedAt(LocalDateTime.now());
+
+        categoryRepository.save(category);
 
         var transaction = new Transaction(dto, household, category, user);
 
